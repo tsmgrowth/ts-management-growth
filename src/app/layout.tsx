@@ -4,7 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { MobileCta } from "@/components/mobile-cta";
-import { company } from "@/lib/site";
+import { company, launch } from "@/lib/site";
 
 const title = `${company.short} | Business Administration Support`;
 const ogImage = { url: "/og.jpg", width: 1200, height: 630, alt: "TS Management Growth LLC: business administration that moves with your growth" };
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: { type: "website", siteName: company.name, title, description, locale: "en_US", url: "/", images: [ogImage] },
   twitter: { card: "summary_large_image", title, description, images: [ogImage.url] },
   // Keep the site out of search results until launch approval. Flip to index: true at launch.
-  robots: { index: false, follow: false },
+  robots: launch.indexable ? { index: true, follow: true } : { index: false, follow: false },
 };
 
 export const viewport: Viewport = { themeColor: "#0a1f4d" };

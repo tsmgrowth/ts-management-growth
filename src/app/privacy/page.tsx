@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage } from "@/components/legal";
-import { company } from "@/lib/site";
+import { business, company } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Privacy Notice", description: "How TS Management Growth LLC collects, uses and protects information submitted through this website." };
 
@@ -44,7 +44,7 @@ export default function Page() {
       <p>See our <Link href="/cookies">Cookie Notice</Link>. In short, the site currently uses no advertising or analytics cookies.</p>
 
       <h2>How long we keep information</h2>
-      <p>We keep consultation requests only as long as needed to respond, to provide approved services and to keep business records, and then delete or de-identify them. Service agreements may state specific retention terms.</p>
+      <p>We keep consultation requests only as long as needed to respond, to provide approved services and to keep business records, and then delete or de-identify them. {business.retentionPeriod ? `Consultation requests that do not become a service are kept for ${business.retentionPeriod}. ` : ""}Service agreements may state specific retention terms.</p>
 
       <h2>Security</h2>
       <p>We use reasonable safeguards, including encrypted connections, restricted database access and spam controls. No method of transmission or storage is perfectly secure. If a breach affecting your information occurs, we will notify you and regulators as Florida law (Fla. Stat. 501.171) and other applicable law require.</p>
@@ -69,7 +69,7 @@ export default function Page() {
       <p>We will post updates here and change the &ldquo;Last updated&rdquo; date above.</p>
 
       <h2>Contact</h2>
-      <p>Questions about this notice can be sent through our <Link href="/contact">contact form</Link>.</p>
+      <p>Questions about this notice can be sent through our <Link href="/contact">contact form</Link>.{business.publicEmail ? ` You can also email ${business.publicEmail}.` : ""}{business.mailingAddress ? ` Mailing address: ${business.mailingAddress}.` : ""}</p>
     </LegalPage>
   );
 }
