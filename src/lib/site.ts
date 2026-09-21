@@ -20,6 +20,20 @@ export const legal = {
   factsVerified: "September 2026",
 };
 
+// LAUNCH SWITCH: set indexable to true only after attorney approval and owner sign-off.
+// It controls robots.txt, the sitemap and the page robots tag together.
+export const launch = { indexable: false };
+
+// Business details the owner still needs to supply. Leave null until confirmed:
+// each one appears on the site automatically once it has a value. Never guess these.
+export const business = {
+  mailingAddress: null as string | null,
+  publicEmail: null as string | null,
+  retentionPeriod: null as string | null, // e.g. "3 years after your last request"
+  refundTerms: null as string | null,
+  venue: null as string | null, // e.g. "the state and federal courts located in ___ County, Florida"
+};
+
 // Non-service reasons to contact us (shown in the contact form and validated server-side).
 export const requestTypes = [
   { slug: "international", title: "International client inquiry" },

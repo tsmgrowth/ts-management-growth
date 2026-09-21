@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage } from "@/components/legal";
-import { company } from "@/lib/site";
+import { business, company } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Terms of Use", description: "Terms for using the TS Management Growth LLC website." };
 
@@ -20,7 +20,7 @@ export default function Page() {
 
       <h2>Consultation requests and services</h2>
       <p>
-        Submitting the contact form is a request for a conversation, not a contract. Work begins only after we confirm the scope and price with you in writing and you approve it. Prices shown on the site are our service fees. Government, state and third-party fees are separate, are set by those agencies, and can change. Any refund, cancellation or payment terms will be stated in the written scope you approve.
+        Submitting the contact form is a request for a conversation, not a contract. Work begins only after we confirm the scope and price with you in writing and you approve it. Prices shown on the site are our service fees. Government, state and third-party fees are separate, are set by those agencies, and can change. Any refund, cancellation or payment terms will be stated in the written scope you approve.{business.refundTerms ? ` ${business.refundTerms}` : ""}
       </p>
 
       <h2>Your responsibilities</h2>
@@ -44,7 +44,7 @@ export default function Page() {
       <p>To the fullest extent permitted by law, {company.name} is not liable for indirect, incidental, special or consequential damages arising from your use of the site or reliance on its content. Nothing in these terms limits liability that cannot be limited by law. Liability for paid services will be governed by the written scope you approve.</p>
 
       <h2>Governing law</h2>
-      <p>These terms are governed by the laws of the State of Florida, without regard to conflict-of-law rules. This does not affect any mandatory consumer rights you have under the law of the place where you live.</p>
+      <p>These terms are governed by the laws of the State of Florida, without regard to conflict-of-law rules. This does not affect any mandatory consumer rights you have under the law of the place where you live.{business.venue ? ` Disputes will be brought in ${business.venue}.` : ""}</p>
 
       <h2>Changes</h2>
       <p>We may update these terms by posting a new version here with a new &ldquo;Last updated&rdquo; date. Continued use of the site means you accept the updated terms.</p>
