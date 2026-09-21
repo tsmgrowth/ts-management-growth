@@ -2,7 +2,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
-import { getService } from "@/lib/site";
+import { getService, requestTypeTitle } from "@/lib/site";
 import { customerEmail, ownerEmail } from "@/lib/email";
 
 export type FormState = {
@@ -40,7 +40,7 @@ export async function submitConsultation(_prev: FormState, fd: FormData): Promis
   if (SENSITIVE.test(values.message)) {
     return fail("Your message looks like it may contain a Social Security, taxpayer ID or card number. Please remove it. We never need those here.");
   }
-  if (values.service && values.service !== "not-sure" && !getService(values.service)) values.service = "";
+  if (values.service && values.service !== "not-sure" && !getService(values.service) && !requestTypeTitle(values.service)) values.service = "";
 
   const { SUPABASE_URL, SUPABASE_SECRET_KEY, RESEND_API_KEY, NOTIFY_EMAIL, FROM_EMAIL } = process.env;
   if (!SUPABASE_URL || !SUPABASE_SECRET_KEY) {
@@ -79,7 +79,7 @@ export async function submitConsultation(_prev: FormState, fd: FormData): Promis
       name: values.name.replace(/[\r\n]+/g, " "),
       email: values.email,
       phone: values.phone,
-      serviceTitle: values.service && values.service !== "not-sure" ? (getService(values.service)?.title ?? "Not specified") : "Not sure yet",
+      serviceTitle: values.service && values.service !== "not-sure" ? (getService(values.service)?.title ?? requestTypeTitle(values.service) ?? "Not specified") : "Not sure yet",
       message: values.message,
       receivedAt: new Date(),
     };

@@ -8,6 +8,8 @@ import { groups, services } from "@/lib/site";
 
 const nav = [
   { href: "/how-it-works", label: "How it works" },
+  { href: "/international", label: "International" },
+  { href: "/rules", label: "Rules" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
@@ -26,14 +28,14 @@ export function Header() {
       <div className="container-x flex h-[4.5rem] items-center justify-between gap-4">
         <Logo />
 
-        <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
+        <nav aria-label="Main" className="hidden items-center gap-1 xl:flex">
           <div className="relative">
             <button
               type="button"
               aria-expanded={menu}
               aria-controls="services-menu"
               onClick={() => setMenu((v) => !v)}
-              className="flex items-center gap-1 rounded-full px-4 py-2 text-[0.95rem] font-medium text-ink hover:bg-mist"
+              className="flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-2 text-[0.95rem] font-medium text-ink hover:bg-mist"
             >
               Services <Chevron className={`h-4 w-4 transition ${menu ? "rotate-180" : ""}`} />
             </button>
@@ -62,19 +64,19 @@ export function Header() {
             )}
           </div>
           {nav.map((n) => (
-            <Link key={n.href} href={n.href} onClick={closeAll} className="rounded-full px-4 py-2 text-[0.95rem] font-medium text-ink hover:bg-mist">
+            <Link key={n.href} href={n.href} onClick={closeAll} className="whitespace-nowrap rounded-full px-3 py-2 text-[0.95rem] font-medium text-ink hover:bg-mist">
               {n.label}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link href="/contact" className="btn btn-primary hidden !px-5 !py-2.5 !text-[0.95rem] sm:inline-flex">
+          <Link href="/contact" className="btn btn-primary hidden whitespace-nowrap !px-5 !py-2.5 !text-[0.95rem] sm:inline-flex">
             Request a Consultation
           </Link>
           <button
             type="button"
-            className="grid h-11 w-11 place-items-center rounded-full border border-line lg:hidden"
+            className="grid h-11 w-11 place-items-center rounded-full border border-line xl:hidden"
             aria-expanded={mobile}
             aria-controls="mobile-nav"
             aria-label={mobile ? "Close menu" : "Open menu"}
@@ -86,7 +88,7 @@ export function Header() {
       </div>
 
       {mobile && (
-        <nav id="mobile-nav" aria-label="Mobile" className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-line bg-white px-5 pb-8 pt-4 lg:hidden">
+        <nav id="mobile-nav" aria-label="Mobile" className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-line bg-white px-5 pb-8 pt-4 xl:hidden">
           {groups.map((g) => (
             <div key={g.id} className="mb-4">
               <p className="text-xs font-semibold uppercase tracking-wider text-brand-700">{g.title}</p>

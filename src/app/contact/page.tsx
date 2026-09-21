@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { PageHero, Section } from "@/components/page-shell";
 import { ContactForm } from "@/components/contact-form";
-import { getService } from "@/lib/site";
+import { getService, requestTypeTitle } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Contact and Consultation" };
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ service?: string }> }) {
   const { service } = await searchParams;
-  const defaultService = service && getService(service) ? service : "";
+  const defaultService = service && (getService(service) || requestTypeTitle(service)) ? service : "";
 
   return (
     <>
