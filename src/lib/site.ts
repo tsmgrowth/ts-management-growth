@@ -8,7 +8,8 @@ export const company = {
   serviceArea: "Serving clients in Florida. Services are provided digitally by phone, video and email.",
   scope:
     "TS Management Growth LLC provides business administration and administrative support services. We do not provide legal advice, tax advice, accounting advice, or legal representation.",
-  siteUrl: "https://tsmanagementgrowth.com",
+  // Set SITE_URL in Vercel to the real domain when it goes live (drives share-card and email image links).
+  siteUrl: process.env.SITE_URL || "https://ts-management-growth.vercel.app",
   phone: null as string | null, // add when the new business number is ready
 };
 
