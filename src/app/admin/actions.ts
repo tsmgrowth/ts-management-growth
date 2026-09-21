@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { endSession, newToken, requireAdmin } from "@/lib/session";
 import { loadById } from "@/lib/invoices";
 import { sendMail } from "@/lib/mail";
-import { invoiceEmail } from "@/lib/invoice-email";
+import { invoiceEmail, paidOwnerEmail } from "@/lib/invoice-email";
 import { toCents } from "@/lib/money";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -94,8 +94,8 @@ export async function createInvoice(_p: ActionState, fd: FormData): Promise<Acti
     await d.from("invoices").delete().eq("id", inv.id);
     return { error: "Could not save the line items." };
   }
-  if (send) await deliver(inv.id);
-  redirect(`/admin/invoices/${inv.id}`);
+  const mailMsg = send ? await deliver(inv.id) : "";
+  redirect(`/admin/invoices/${inv.id}${mailMsg ? `?mailerr=${encodeURIComponent(mailMsg)}` : ""}`);
 }
 
 async function deliver(id: string): Promise<string> {
@@ -119,8 +119,16 @@ export async function markPaid(id: string, _p: ActionState, fd: FormData): Promi
   const how = ["cash", "check", "zelle", "other"].includes(t(fd.get("how"), 20)) ? t(fd.get("how"), 20) : "other";
   const { error } = await db().from("invoices").update({ status: "paid", paid_at: new Date().toISOString(), paid_via: how }).eq("id", id).neq("status", "void");
   if (error) return { error: "Could not update the invoice." };
+  const f = await loadById(id);
+  let mailIssue = "";
+  if (f && process.env.NOTIFY_EMAIL) {
+    const r = await sendMail({ to: process.env.NOTIFY_EMAIL, ...paidOwnerEmail(f, how) });
+    if (!r.ok) mailIssue = ` (confirmation email did not send: ${r.error})`;
+  } else if (!process.env.NOTIFY_EMAIL) {
+    mailIssue = " (NOTIFY_EMAIL is not set, so no confirmation email was sent)";
+  }
   revalidatePath(`/admin/invoices/${id}`);
-  return { error: "" };
+  return { error: mailIssue ? `Marked as paid${mailIssue}.` : "" };
 }
 
 export async function voidInvoice(id: string): Promise<ActionState> {
