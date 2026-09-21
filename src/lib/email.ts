@@ -11,23 +11,23 @@ export type Lead = {
 };
 
 // Change to the real domain once it is live. The logo image is served from /public/logo-mark.jpg.
-const SITE = process.env.SITE_URL || "https://ts-management-growth.vercel.app";
+export const SITE = process.env.SITE_URL || "https://ts-management-growth.vercel.app";
 
-const C = {
+export const C = {
   ink: "#0b1b3b", muted: "#4a5877", n950: "#050f26", n900: "#0a1f4d", b600: "#1f5fe0", b700: "#1449c9",
   sky: "#0089d7", glow: "#38bdf8", mist: "#f5f8fc", line: "#e3e8f0", silver: "#c9d1de",
 };
-const FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+export const FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
 
-const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
-const first = (name: string) => name.trim().split(/\s+/)[0] || "there";
+export const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+export const first = (name: string) => name.trim().split(/\s+/)[0] || "there";
 const when = (d: Date) =>
   new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(d) + " ET";
 
 const gradient = `background:${C.n900};background-image:radial-gradient(circle at 92% 0%,rgba(56,189,248,0.55),rgba(56,189,248,0) 55%),linear-gradient(135deg,${C.n900} 0%,${C.b700} 100%);`;
 const btnGradient = `background:${C.b600};background-image:linear-gradient(135deg,#2b6cf0 0%,${C.b700} 100%);`;
 
-function button(href: string, label: string, kind: "primary" | "ghost" = "primary") {
+export function button(href: string, label: string, kind: "primary" | "ghost" = "primary") {
   const style =
     kind === "primary"
       ? `${btnGradient}color:#ffffff;border:1px solid ${C.b700};`
@@ -35,11 +35,11 @@ function button(href: string, label: string, kind: "primary" | "ghost" = "primar
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display:inline-table;margin:0 8px 10px 0;"><tr><td style="border-radius:999px;${style}"><a href="${esc(href)}" style="display:inline-block;padding:15px 30px;font:700 16px ${FONT};color:${kind === "primary" ? "#ffffff" : C.n900};text-decoration:none;border-radius:999px;">${label}</a></td></tr></table>`;
 }
 
-function pill(text: string) {
+export function pill(text: string) {
   return `<span style="display:inline-block;padding:7px 14px;border-radius:999px;background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.55);font:700 12px ${FONT};letter-spacing:0.14em;color:${C.glow};">${text}</span>`;
 }
 
-function shell(opts: { preheader: string; hero: string; body: string; footNote: string }) {
+export function shell(opts: { preheader: string; hero: string; body: string; footNote: string }) {
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light only"><title>TS Management Growth</title></head>
 <body style="margin:0;padding:0;background:${C.n950};">
