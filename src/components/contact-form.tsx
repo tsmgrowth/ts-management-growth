@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { submitConsultation, type FormState } from "@/app/contact/actions";
 import { Arrow, Check } from "./icons";
 import { services } from "@/lib/site";
@@ -12,10 +12,16 @@ const label = "block text-sm font-semibold text-ink";
 export function ContactForm({ defaultService }: { defaultService: string }) {
   const [state, action, pending] = useActionState(submitConsultation, initial);
   const [opened] = useState(() => String(Date.now()));
+  const result = useRef<HTMLDivElement>(null);
+
+  // Bring the success or error message into view so it is never hidden above the fold.
+  useEffect(() => {
+    if (state.status !== "idle") result.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [state]);
 
   if (state.status === "ok") {
     return (
-      <div className="card animate-rise" role="status">
+      <div ref={result} className="card animate-rise" role="status">
         <p className="inline-flex items-center gap-2 rounded-full bg-mist px-3 py-1 text-sm font-semibold text-brand-700"><Check className="h-4 w-4" /> Request received</p>
         <h2 className="mt-4 text-2xl font-semibold tracking-tight">Thank you. We will be in touch.</h2>
         <p className="mt-2 leading-relaxed text-muted">We will review your request and follow up to confirm the scope. No work begins until you approve it.</p>
@@ -27,7 +33,7 @@ export function ContactForm({ defaultService }: { defaultService: string }) {
   return (
     <form action={action} className="card space-y-5" noValidate>
       {state.status === "error" && (
-        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">{state.message}</p>
+        <div ref={result} role="alert" className="rounded-xl border border-red-300 bg-red-50 p-4 text-base font-medium text-red-800">{state.message}</div>
       )}
 
       <div>
