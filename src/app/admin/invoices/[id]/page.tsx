@@ -11,9 +11,10 @@ import { requireAdmin } from "@/lib/session";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Invoice" };
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+export default async function Page({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ mailerr?: string }> }) {
   await requireAdmin();
   const { id } = await params;
+  const { mailerr } = await searchParams;
   const f = await loadById(id);
   if (!f) notFound();
   const { invoice: inv, customer, items } = f;
@@ -26,6 +27,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     <>
       <AdminNav />
       <PageHero crumbs={[{ label: "Admin", href: "/admin" }, { label: customer.name, href: `/admin/customers/${customer.id}` }, { label: invoiceLabel(inv.number) }]} title={`${invoiceLabel(inv.number)} · ${inv.status}`} lead={`${customer.name} · ${customer.email}`} />
+      {mailerr && (
+        <Section className="!pb-0 !pt-8">
+          <p role="alert" className="rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm font-medium text-amber-900">{decodeURIComponent(mailerr)}</p>
+        </Section>
+      )}
       <Section className="grid gap-10 lg:grid-cols-[1.3fr_1fr]">
         <div className="card">
           <h2 className="text-xl font-semibold">Breakdown</h2>
