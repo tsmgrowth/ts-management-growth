@@ -3,7 +3,8 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { submitConsultation, type FormState } from "@/app/contact/actions";
 import { Arrow, Check } from "./icons";
-import { services } from "@/lib/site";
+import Link from "next/link";
+import { requestTypes, services } from "@/lib/site";
 
 const initial: FormState = { status: "idle", message: "", values: { name: "", email: "", phone: "", service: "", message: "" } };
 const input = "mt-1.5 w-full rounded-xl border border-line bg-white px-4 py-3 text-base text-ink placeholder:text-muted/60 focus:border-brand-600";
@@ -57,7 +58,12 @@ export function ContactForm({ defaultService }: { defaultService: string }) {
         <select id="service" name="service" defaultValue={v.service || defaultService} className={input}>
           <option value="">Choose a service</option>
           <option value="not-sure">I am not sure yet</option>
-          {services.map((s) => <option key={s.slug} value={s.slug}>{s.title}</option>)}
+          <optgroup label="Services">
+            {services.map((s) => <option key={s.slug} value={s.slug}>{s.title}</option>)}
+          </optgroup>
+          <optgroup label="Other">
+            {requestTypes.map((r) => <option key={r.slug} value={r.slug}>{r.title}</option>)}
+          </optgroup>
         </select>
       </div>
 
@@ -75,8 +81,10 @@ export function ContactForm({ defaultService }: { defaultService: string }) {
 
       <label className="flex items-start gap-3 text-sm leading-relaxed text-ink">
         <input type="checkbox" name="consent" required className="mt-1 h-5 w-5 shrink-0 accent-brand-600" />
-        <span>I understand TS Management Growth provides administrative support only, not legal, tax or accounting advice, and that nothing starts until I approve the scope.</span>
+        <span>I understand TS Management Growth provides administrative support only, not legal, tax or accounting advice, and that nothing starts until I approve the scope. I have read the <Link href="/privacy" className="font-medium text-brand-700 underline">Privacy Notice</Link> and <Link href="/terms" className="font-medium text-brand-700 underline">Terms of Use</Link>, and I agree that my information may be processed and stored in the United States.</span>
       </label>
+
+      <p className="text-sm leading-relaxed text-muted">We use what you send only to respond to you and provide services you approve. We do not sell it. Details are in the Privacy Notice.</p>
 
       <button type="submit" disabled={pending} className="btn btn-primary w-full sm:w-auto">
         {pending ? "Sending..." : "Send my request"} {!pending && <Arrow className="h-5 w-5" />}

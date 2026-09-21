@@ -1,5 +1,5 @@
 // Central source of truth for company facts and service content.
-// NOTE: prices are DRAFT proposals awaiting owner approval; legal wording awaits attorney review.
+// Prices approved by the owner. Legal wording awaits attorney review (see `legal` below).
 
 export const company = {
   name: "TS Management Growth LLC",
@@ -12,6 +12,24 @@ export const company = {
   siteUrl: process.env.SITE_URL || "https://ts-management-growth.vercel.app",
   phone: null as string | null, // add when the new business number is ready
 };
+
+// Legal-page status. Flip `reviewed` to true ONLY after an attorney has approved the legal pages.
+export const legal = {
+  reviewed: false,
+  lastUpdated: "September 21, 2026",
+  factsVerified: "September 2026",
+};
+
+// Non-service reasons to contact us (shown in the contact form and validated server-side).
+export const requestTypes = [
+  { slug: "international", title: "International client inquiry" },
+  { slug: "privacy-request", title: "Privacy request" },
+  { slug: "accessibility", title: "Accessibility help" },
+] as const;
+
+export function requestTypeTitle(slug: string) {
+  return requestTypes.find((r) => r.slug === slug)?.title;
+}
 
 export type GroupId = "formation" | "organization" | "ongoing" | "agent";
 
@@ -126,7 +144,7 @@ export const services: Service[] = [
       "Confirmation organization",
       "Filing record organization",
     ],
-    govFee: "The Florida LLC annual report fee is $138.75, paid to the state. Late filings cost more.",
+    govFee: "The Florida LLC annual report fee is $138.75, paid to the state. A report received after May 1 costs $538.75 ($400 late fee), and an entity that has not filed by the third Friday of September can be administratively dissolved.",
     from: 79,
     cta: "Discuss a filing",
   },
