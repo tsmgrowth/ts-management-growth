@@ -10,7 +10,7 @@ export type Lead = {
   receivedAt: Date;
 };
 
-// Change to the real domain once it is live. The logo image is served from /public/email/logo.png.
+// Change to the real domain once it is live. The logo image is served from /public/logo-mark.jpg.
 const SITE = process.env.SITE_URL || "https://ts-management-growth.vercel.app";
 
 const C = {
@@ -48,7 +48,7 @@ function shell(opts: { preheader: string; hero: string; body: string; footNote: 
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
   <tr><td style="padding:0 6px 18px;">
     <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-      <td style="vertical-align:middle;"><img src="${SITE}/email/logo.png" width="46" height="46" alt="" style="display:block;border:0;border-radius:12px;"></td>
+      <td style="vertical-align:middle;"><img src="${SITE}/logo-mark.jpg" width="46" height="46" alt="" style="display:block;border:0;border-radius:12px;"></td>
       <td style="vertical-align:middle;padding-left:12px;font:600 18px ${FONT};color:#ffffff;line-height:1.1;">TS Management Growth<br><span style="font:500 10px ${FONT};letter-spacing:0.3em;color:${C.silver};">LLC</span></td>
     </tr></table>
   </td></tr>
