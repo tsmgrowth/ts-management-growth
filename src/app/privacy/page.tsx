@@ -16,6 +16,7 @@ export default function Page() {
       <p>We collect only what you choose to send us and a small amount of technical data needed to run the site.</p>
       <ul>
         <li><strong>Consultation request details:</strong> your name, email address, optional phone number, the service you are interested in, the message you write, your acknowledgement checkbox, and the date and time of your request.</li>
+        <li><strong>Customer records and invoices:</strong> if you become a customer, we keep your contact details, the services and amounts on your invoices, your yes or no choices, and payment status and method (not full card numbers).</li>
         <li><strong>Technical data:</strong> like almost every website, our hosting provider receives your IP address, browser type and the pages requested in routine server logs used for security and reliability.</li>
       </ul>
       <p>
@@ -37,6 +38,7 @@ export default function Page() {
         <li><strong>Vercel</strong> hosts the website.</li>
         <li><strong>Supabase</strong> stores consultation requests in a database with restricted access.</li>
         <li><strong>Resend</strong> delivers the email notifications we send and, once enabled, confirmation emails to you.</li>
+        <li><strong>Stripe</strong> processes card and other online payments on its own secure page. We never see or store your full card number. Stripe handles that data under its own privacy policy.</li>
       </ul>
       <p>We may also disclose information when required by law, to protect rights and safety, or in connection with a sale or reorganization of the business.</p>
 

@@ -1,0 +1,1 @@
+-- see Supabase SQL in chat; run once in the Supabase SQL editor
