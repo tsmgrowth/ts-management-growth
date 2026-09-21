@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 import { getService } from "@/lib/site";
+import { customerEmail, ownerEmail } from "@/lib/email";
 
 export type FormState = {
   status: "idle" | "ok" | "error";
@@ -12,10 +13,9 @@ export type FormState = {
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 // Blocks SSN-like and card-like numbers in free text (we never want these through the site).
-const SENSITIVE = /\b\d{3}[- ]?\d{2}[- ]?\d{4}\b|\b(?:\d[ -]?){13,16}\b/;
+const SENSITIVE = /\b\d{3}[- ]?\d{2}[- ]?\d{4}\b|\b\d{2}-\d{7}\b|\b(?:\d[ -]?){13,16}\b/;
 
 const clean = (v: FormDataEntryValue | null, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
-const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
 export async function submitConsultation(_prev: FormState, fd: FormData): Promise<FormState> {
   const values = {
@@ -74,23 +74,27 @@ export async function submitConsultation(_prev: FormState, fd: FormData): Promis
 
   // The request is safely stored. Email is a notification only, so a failure here must not fail the visitor.
   if (RESEND_API_KEY && NOTIFY_EMAIL && FROM_EMAIL) {
+    const resend = new Resend(RESEND_API_KEY);
+    const lead = {
+      name: values.name.replace(/[\r\n]+/g, " "),
+      email: values.email,
+      phone: values.phone,
+      serviceTitle: values.service && values.service !== "not-sure" ? (getService(values.service)?.title ?? "Not specified") : "Not sure yet",
+      message: values.message,
+      receivedAt: new Date(),
+    };
+    const from = `TS Management Growth <${FROM_EMAIL}>`;
     try {
-      const svc = values.service && values.service !== "not-sure" ? getService(values.service)?.title : "Not sure yet";
-      const rows: [string, string][] = [
-        ["Name", values.name],
-        ["Email", values.email],
-        ["Phone", values.phone || "not provided"],
-        ["Service", svc ?? "Not specified"],
-      ];
-      const { error: mailError } = await new Resend(RESEND_API_KEY).emails.send({
-        from: `TS Management Growth <${FROM_EMAIL}>`,
-        to: [NOTIFY_EMAIL],
-        replyTo: values.email,
-        subject: `New consultation request: ${values.name}`,
-        html: `<h2>New consultation request</h2>${rows.map(([k, v]) => `<p><strong>${k}:</strong> ${esc(v)}</p>`).join("")}<p><strong>Message:</strong></p><p style="white-space:pre-wrap">${esc(values.message)}</p>`,
-        text: `${rows.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\nMessage:\n${values.message}`,
-      });
-      if (mailError) console.error("consultation: email failed", mailError.message);
+      const o = ownerEmail(lead);
+      const { error: mailError } = await resend.emails.send({ from, to: [NOTIFY_EMAIL], replyTo: values.email, subject: o.subject, html: o.html, text: o.text });
+      if (mailError) console.error("consultation: owner email failed", mailError.message);
+
+      // Customer confirmation: turn on with SEND_CONFIRMATION=true once a domain is verified in Resend.
+      if (process.env.SEND_CONFIRMATION === "true") {
+        const c = customerEmail(lead);
+        const { error: confError } = await resend.emails.send({ from, to: [values.email], subject: c.subject, html: c.html, text: c.text });
+        if (confError) console.error("consultation: confirmation email failed", confError.message);
+      }
     } catch (e) {
       console.error("consultation: email threw", e);
     }
