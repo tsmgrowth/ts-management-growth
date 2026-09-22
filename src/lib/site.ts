@@ -29,9 +29,10 @@ export const launch = { indexable: false };
 export const business = {
   mailingAddress: null as string | null,
   publicEmail: null as string | null,
-  retentionPeriod: null as string | null, // e.g. "3 years after your last request"
-  refundTerms: null as string | null,
-  venue: null as string | null, // e.g. "the state and federal courts located in ___ County, Florida"
+  retentionPeriod: "1 year from your last request or the end of our engagement, whichever is later",
+  refundTerms:
+    "No refund once a filing has been submitted to a government agency. If work has not yet been submitted, 80% of fees paid are refundable; the remaining 20% covers the time, expertise and preparation already provided.",
+  venue: "the state and federal courts located in Palm Beach County, Florida",
 };
 
 // Non-service reasons to contact us (shown in the contact form and validated server-side).
